@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ecloud.mapper.UserMapper">
+    <resultMap type="com.ecloud.entity.User" id="User">
+        <id property="id" column="USER_ID"/>
+        <result property="name" column="USER_NAME"/>
+    </resultMap>
+    <select id="getUser" resultMap="User" flushCache="true"
+            parameterType="java.lang.Integer">
+        select
+        *
+        from user where USER_ID=#{id}
+    </select>
+
+    <insert id="addUser" flushCache="true"
+            parameterType="com.ecloud.entity.User" useGeneratedKeys="true" keyProperty="id">
+        insert into user (USER_ID,USER_NAME,USER_AGE) values (0,#{name},#{age});
+    </insert>
+
+    <delete id="deleteUser" parameterType="java.lang.Integer">
+    delete from user where USER_ID = #{id}
+  </delete>
+
+    <update id="updateUser" parameterType="com.ecloud.entity.User" flushCache="true">
+    update user
+    set USER_NAME = #{name},
+      USER_AGE = #{age}
+    where USER_ID = #{id}
+  </update>
+
+    <!-- 刷新间隔 -->
+    <cache flushInterval="600000"/>
+</mapper>
