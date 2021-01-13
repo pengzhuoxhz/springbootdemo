@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ecloud.entity.User;
 import com.ecloud.service.IUserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +15,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 public class UserController {
 
+    private static final Logger logger= LoggerFactory.getLogger(UserController.class);
+
     @Autowired
     private IUserService userService;
 
     @RequestMapping(value = "getUser")
     @ResponseBody
-    public User GetUser(@RequestParam int id){
-        return userService.getUser(id);
+    public User GetUser(@RequestBody String param){
+        JSONObject json = JSON.parseObject(param);
+        return userService.getUser(Integer.parseInt(json.getString("id")));
     }
 
     @RequestMapping(value = "updateUser")
@@ -45,13 +50,17 @@ public class UserController {
 
     @RequestMapping(value = "deleteUser")
     @ResponseBody
-    public void deleteUser(@RequestParam int id){
-        userService.deleteUser(id);
+    public void deleteUser(@RequestBody String param){
+        JSONObject json = JSON.parseObject(param);
+        userService.deleteUser(Integer.parseInt(json.getString("id")));
     }
 
     @RequestMapping(value = "/test")
-    public String deleteUser(){
-        return "user/user";
+    @ResponseBody
+    public void test(){
+        User user = null;
+        user.setId(1);
+        logger.info("123");
     }
 
 }
